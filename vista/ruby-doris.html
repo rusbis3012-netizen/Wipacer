@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <title>WIPACER - Facturación</title>
+    <style>
+        .header-mr {
+            background-color: rgb(122, 172, 247);
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .modulo-card {
+            border-top: 4px solid cornflowerblue;
+            border-radius: 10px;
+            transition: 0.2s;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .modulo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .icono-principal {
+            font-size: 40px;
+            color: rgb(105, 154, 245);
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="header-mr d-flex justify-content-between align-items-center">
+        <h3>WIPACER - Facturación</h3>
+        <div class="text-end">
+            <small id="nombreUsuario"></small>
+            <button class="btn btn-danger btn-sm m-1" onclick="cerrarSesion()">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <h5 class="mb-4 fw-bold">Módulo de Facturación Electrónica</h5>
+
+        <div id="InfoClientes" class="row g-4">
+            <div class="col-md- 12">
+                <div class="card modulo-card shadow-sm p-4 bg-white">
+
+                    <div class="d-flex align-items-center gap-2 mb-4 pb-2 border-bottom">
+                        <i class="bi bi-person-lines-fill icono-principal"></i>
+                        <div>
+                            <h4 class="text-primary">Información del cliente y Facturación</h4>
+                            <span class="small text-muted">Complete los datos requeridos para la emisión de su
+                                factura.</span>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label>Cliente</label>
+                            <select class="form-select">
+                                <option value=""> Seleccionar o Buscar Cliente </option>
+                                <option value="1">ACME Industrial S.A.S.</option>
+                                <option value="2">Comercializadora Andina</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Forma de Pago</label>
+                            <select class="form-select">
+                                <option value="">Seleccionar Forma de Pago</option>
+                                <option>Efectivo o Transferencia</option>
+                                <option>Crédito - 30 días</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Fecha de Emision</label>
+                            <input type="date" class="form-control" value="2026-10-28">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Fecha de Vencimiento</label>
+                            <input type="date" class="form-control" value="2026-10-28">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Orden de Compra</label>
+                            <input type="text" class="form-control" required placeholder="ejemplo: OC-2026-99">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
