@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Compras</title>
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fb;
+    color: #243447;
+}
+
+header {
+    background-color: #285f91;
+    color: white;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo span {
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff30;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.logo h1 {
+    font-size: 25px;
+}
+
+nav {
+    display: flex;
+    gap: 12px;
+}
+
+nav button {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #ffffff80;
+    border-radius: 8px;
+    padding: 11px 18px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+nav button:hover {
+    background-color: white;
+    color: #285f91;
+}
+
+
+main {
+    width: 88%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+.Bienvenida {
+    background: linear-gradient(120deg, #dceaf7, #edf4fc);
+    padding: 35px;
+    border-radius: 16px;
+    margin-bottom: 35px;
+}
+
+.Bienvenida h2 {
+    font-size: 30px;
+    color: #285f91;
+    margin-bottom: 12px;
+}
+
+.Bienvenida p {
+    color: #5d7085;
+    line-height: 1.6;
+}
+
+.catalogo h2 {
+    font-size: 24px;
+    margin-bottom: 22px;
+}
+
+
+.Productos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.producto {
+    background-color: white;
+    border: 1px solid #e1e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px #2434470d;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px #2434471a;
+}
+
+.imagen-producto {
+    height: 190px;
+    background: linear-gradient(135deg, #e4effa, #f4f7fb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 65px;
+}
+
+
+.informacion-producto {
+    padding: 20px;
+}
+
+.informacion-producto h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.informacion-producto p {
+    color: #687b90;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.informacion-producto .precio {
+    color: #285f91;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+
+.informacion-producto button {
+    width: 100%;
+    background-color: #285f91;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.informacion-producto button:hover {
+    background-color: #19466f;
+}
+
+
+.carrito {
+    margin-top: 35px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #e1e8f0;
+}
+
+.carrito h2 {
+    margin-bottom: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #718196;
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .Productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    main {
+        width: 92%;
+    }
+}
+
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav {
+        width: 100%;
+    }
+
+    nav button {
+        flex: 1;
+    }
+
+    .Productos {
+        grid-template-columns: 1fr;
+    }
+
+    .Bienvenida {
+        padding: 25px;
+    }
+
+    .Bienvenida h2 {
+        font-size: 25px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <span></span>
+            <h1>Compras</h1>
+        </div>
+
+        <nav>
+            <button type="button">Productos</button>
+            <button type="button">Mis compras</button>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="Bienvenida">
+            <h2>¡Compra aquí!</h2>
+            <p>Bienvenido a nuestra tienda virtual.</p>
+        </section>
+
+        <section class="catalogo">
+            <h2>Nuestros productos</h2>
+
+            <div class="Productos">
+
+                <article class="producto">
+
+                    <div class="imagen-producto">
+                        <span></span>
+                    </div>
+
+                    <div class="informacion-producto">
+                        <h3>Audífonos Bluetooth</h3>
+                        <p>Disfruta de tu música sin cables.</p>
+                        <p class="precio">$79.900</p>
+
+                        <button type="button">
+                            Agregar al carrito
+                        </button>
+                    </div>
+
+                </article>
+
+                  <article class="producto">
+
+                    <div class="imagen-producto">
+                        <span></span>
+                    </div>
+
+                    <div class="informacion-producto">
+                        <h3>Mouse Inalambrico</h3>
+                        <p>Mouse </p>
+                        <p class="precio">$100.900</p>
+
+                        <button type="button">
+                            Agregar al carrito
+                        </button>
+                    </div>
+
+                </article>
+                  <article class="producto">
+
+                    <div class="imagen-producto">
+                        <span></span>
+                    </div>
+
+                    <div class="informacion-producto">
+                        <h3>USB 64GB</h3>
+                        <p>Capacidad expansible</p>
+                        <p class="precio">$45.000</p>
+
+                        <button type="button">
+                            Agregar al carrito
+                        </button>
+                    </div>
+
+                </article>
+                  <article class="producto">
+
+                    <div class="imagen-producto">
+                        <span></span>
+                    </div>
+
+                    <div class="informacion-producto">
+                        <h3>Teclado Inalambrico</h3>
+                        <p>Disfruta de tu teclado sin cables.</p>
+                        <p class="precio">$234.000</p>
+
+                        <button type="button">
+                            Agregar al carrito
+                        </button>
+                    </div>
+
+                </article>
+
+            </div>
+        </section>
+
+        <section class="carrito" id="carrito">
+            <h2>Mi carrito</h2>
+            <p>Aún no has agregado productos.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CLUB ADSO. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
