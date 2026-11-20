@@ -130,32 +130,7 @@
                                     <th><i class="bi bi-trash"></i></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="text-center">
-                                    <td>1</td>
-                                    <td>PROD-001</td>
-                                    <td>Producto de ejemplo 1</td>
-                                    <td>2</td>
-                                    <td>$50.00</td>
-                                    <td>$100.00</td>
-                                    <td>0%</td>
-                                    <td>19%</td>
-                                    <td>$119.00</td>
-                                    <td><i class="bi bi-trash text-danger"></i></td>
-                                </tr>
-                                <tr class="text-center">
-                                    <td>2</td>
-                                    <td>PROD-002</td>
-                                    <td>Producto de ejemplo 2</td>
-                                    <td>1</td>
-                                    <td>$75.00</td>
-                                    <td>$75.00</td>
-                                    <td>0%</td>
-                                    <td>19%</td>
-                                    <td>$89.25</td>
-                                    <td><i class="bi bi-trash text-danger"></i></td>
-                                </tr>
-                            </tbody>
+                            <tbody id="tablaProductos"></tbody>
                         </table>
                     </div>
                 </div>
@@ -165,52 +140,51 @@
         <div id="TotalesFactura" class="row g-4 mt-1 justify-content-end">
             <div class="col-md-5">
                 <div class="card modulo-card shadow-sm p-4 bg-white">
-
-
                     <h5 class="fw-bold text-uppercase pb-2 border-bottom mb-3">
                         Totales de la Factura
                     </h5>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">Subtotal</span>
-                        <span class="fw-bold">$ 20.825</span>
+                        <strong id="subtotalFactura">$0</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">Descuentos</span>
-                        <span class="text-danger fw-bold">- $ 0</span>
+                        <strong id="descuentosFactura">$0</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">Subtotal Gravable</span>
-                        <span class="fw-bold">$ 20.825</span>
+                        <strong id="gravableFactura">$0</strong>
                     </div>
-
-                    <!-- IVA (19%) -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-muted">IVA (19%)</span>
-                        <span class="fw-bold">$ 68.932</span>
+                        <strong id="ivaFactura">$0</strong>
                     </div>
-
                     <div class="border-top pt-2 mb-2">
                         <div class="d-flex justify-content-between align-items-center mb-1 small">
                             <span class="text-muted">Retenciones (ReteFuente 2.5%)</span>
-                            <span class="text-danger">- $ 9.070</span>
+                            <strong id="reteFuenteFactura">$0</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center small">
                             <span class="text-muted">Retenciones (ReteICA 1%)</span>
-                            <span class="text-danger">- $ 3.628</span>
+                            <strong id="reteIcaFactura">$0</strong>
                         </div>
                     </div>
-                    <div class="border-top border-dark border-2 pt-3 mt-2 d-flex justify-content-between align-items-center">
+                    <div
+                        class="border-top border-dark border-2 pt-3 mt-2 d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="fw-bold m-0">GRAN TOTAL</h4>
                             <small class="text-muted">Total a pagar cliente</small>
                         </div>
-                        <h3 class="fw-bold m-0" >$ 77.059</h3>
+                        <h4 class="fw-bold m-0" id="granTotalFactura">$0</h4>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+
+    </script>
 </body>
 
 </html>
