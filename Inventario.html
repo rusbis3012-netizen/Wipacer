@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Control de Inventario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#6F9FCB',    
+                            secondary: '#9B91C9',  
+                            success: '#A9C7BB',    
+                            alert: '#E8847C',      
+                            accent: '#E8D2AD',     
+                            text: '#243B53',       
+                            bg: '#F8FAFC'          
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            color: #243B53;
+            background-color: #F8FAFC;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16">
+
+    
+    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#6F9FCB] text-white flex items-center justify-center shadow-md">
+                    <i data-lucide="boxes" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-[#243B53] tracking-tight">Gestión de Inventario</h1>
+                    <p class="text-xs text-slate-500 font-medium">Control de Existencias & Movimientos de Stock</p>
+                </div>
+            </div>
+
+            <button onclick="openAdjustModal()" class="px-4 py-2 rounded-xl bg-[#6F9FCB] hover:bg-[#5b87b2] text-white text-xs font-bold shadow-md shadow-[#6F9FCB]/20 transition-all flex items-center gap-1.5 active:scale-95">
+                <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                <span>Ajustar Stock</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+
+        
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-[#6F9FCB]/15 text-[#6F9FCB] flex items-center justify-center">
+                    <i data-lucide="package" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-semibold block">Total Unidades</span>
+                    <span id="kpiTotalStock" class="text-2xl font-black text-[#243B53]">0</span>
+                    <span class="text-[10px] text-slate-400 block">En 3 bodegas activas</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-[#A9C7BB]/25 text-[#243B53] flex items-center justify-center">
+                    <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-semibold block">Valor en Bodega</span>
+                    <span id="kpiTotalValue" class="text-2xl font-black text-[#243B53]">$0</span>
+                    <span class="text-[10px] text-[#A9C7BB] font-bold block">Costo total acumulado</span>
+                </div>
+            </div>
+
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-[#E8847C]/15 text-[#E8847C] flex items-center justify-center">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-semibold block">Bajo Stock Mínimo</span>
+                    <span id="kpiLowStock" class="text-2xl font-black text-[#E8847C]">0</span>
+                    <span class="text-[10px] text-[#E8847C] font-bold block">Requiere reorden pronto</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-[#9B91C9]/20 text-[#9B91C9] flex items-center justify-center">
+                    <i data-lucide="warehouse" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-semibold block">Ocupación Bodegas</span>
+                    <span class="text-2xl font-black text-[#243B53]">78%</span>
+                    <span class="text-[10px] text-slate-400 block">Capacidad promedio</span>
+                </div>
+            </div>
+        </div>
+
+        
+        
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Barra de búsqueda -->
+            <div class="relative w-full md:w-80">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input type="text" id="searchInput" oninput="filterInventory()" placeholder="Buscar por SKU o Producto..." 
+                       class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-[#243B53] placeholder-slate-400 focus:outline-none focus:border-[#6F9FCB] focus:ring-1 focus:ring-[#6F9FCB]">
+            </div>
+
+            
+            <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                <button onclick="setStatusFilter('todos')" id="filterBtnTodos" class="status-btn px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#6F9FCB] text-white shadow-sm transition-all">Todos</button>
+                <button onclick="setStatusFilter('critico')" id="filterBtnCritico" class="status-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#243B53] hover:bg-slate-100 transition-all">Stock Bajo</button>
+                <button onclick="setStatusFilter('optimo')" id="filterBtnOptimo" class="status-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#243B53] hover:bg-slate-100 transition-all">Óptimo</button>
+            </div>
+        </div>
+
+        
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 border-b border-slate-200/80 text-slate-500 uppercase tracking-wider font-bold">
+                        <tr>
+                            <th class="px-5 py-4">SKU / Código</th>
+                            <th class="px-5 py-4">Producto</th>
+                            <th class="px-5 py-4">Bodega</th>
+                            <th class="px-5 py-4">Nivel de Stock</th>
+                            <th class="px-5 py-4">Costo Unit.</th>
+                            <th class="px-5 py-4">Total Valorado</th>
+                            <th class="px-5 py-4">Estado</th>
+                            <th class="px-5 py-4 text-right">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody" class="divide-y divide-slate-100">
+                        <!-- Las filas se renderizan dinámicamente con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <div id="adjustModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-[#6F9FCB]/20 text-[#6F9FCB] flex items-center justify-center">
+                        <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-[#243B53]">Ajuste de Existencias</h3>
+                </div>
+                <button onclick="closeAdjustModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="adjustStockForm" onsubmit="handleStockSubmit(event)" class="space-y-4">
+                <input type="hidden" id="modalItemId" value="">
+
+                <div>
+                    <label class="block text-xs font-bold text-[#243B53] mb-1">Artículo</label>
+                    <select id="modalItemSelect" onchange="onModalItemSelectChange(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#6F9FCB]">
+                        <!-- Se llena dinámicamente -->
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-[#243B53] mb-1">Tipo Movimiento</label>
+                        <select id="modalType" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-[#243B53] focus:outline-none focus:border-[#6F9FCB]">
+                            <option value="entrada">Entrada (+) Ingreso</option>
+                            <option value="salida">Salida (-) Retiro / Merma</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#243B53] mb-1">Cantidad</label>
+                        <input type="number" id="modalQty" min="1" value="5" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-[#243B53] focus:outline-none focus:border-[#6F9FCB]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-[#243B53] mb-1">Motivo / Observación</label>
+                    <input type="text" id="modalReason" placeholder="Ej. Entrada por nueva orden de compra" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs text-[#243B53] focus:outline-none focus:border-[#6F9FCB]">
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeAdjustModal()" class="w-1/3 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-500 hover:bg-slate-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="w-2/3 py-2.5 rounded-xl bg-[#6F9FCB] hover:bg-[#5b87b2] text-white text-xs font-bold shadow-md shadow-[#6F9FCB]/20 transition-all">
+                        Confirmar Ajuste
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <div id="toast" class="fixed bottom-6 left-6 z-50 bg-[#243B53] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="w-6 h-6 rounded-full bg-[#A9C7BB] text-[#243B53] flex items-center justify-center font-bold text-xs">✓</div>
+        <span id="toastMsg" class="text-xs font-semibold">Movimiento registrado</span>
+    </div>
+
+
+    <script>
+
+        let inventory = [
+            { id: 1, sku: 'TECH-LAP-01', name: 'Laptop Pro 16" M3 Max', category: 'Equipos', warehouse: 'Bodega Central', stock: 18, minStock: 10, cost: 2100, icon: 'laptop' },
+            { id: 2, sku: 'TECH-MON-02', name: 'Monitor Curvo UltraWide 34"', category: 'Periféricos', warehouse: 'Almacén Norte', stock: 6, minStock: 12, cost: 450, icon: 'monitor' },
+            { id: 3, sku: 'TECH-AUD-03', name: 'Auriculares Hi-Fi Noise Cancelling', category: 'Audio', warehouse: 'Bodega Central', stock: 42, minStock: 15, cost: 240, icon: 'headphones' },
+            { id: 4, sku: 'TECH-KEY-04', name: 'Teclado Mecánico Custom RGB', category: 'Periféricos', warehouse: 'Almacén Norte', stock: 8, minStock: 15, cost: 95, icon: 'keyboard' },
+            { id: 5, sku: 'TECH-SMP-05', name: 'Smartphone Ultra 5G 256GB', category: 'Equipos', warehouse: 'Bodega Central', stock: 25, minStock: 10, cost: 890, icon: 'smartphone' },
+            { id: 6, sku: 'TECH-WAT-06', name: 'Smartwatch Deportivo Pro', category: 'Audio & Relojes', warehouse: 'Depósito Garantías', stock: 4, minStock: 8, cost: 195, icon: 'watch' },
+            { id: 7, sku: 'TECH-MOU-07', name: 'Mouse Ergonómico Precision', category: 'Periféricos', warehouse: 'Almacén Norte', stock: 35, minStock: 10, cost: 65, icon: 'mouse' },
+            { id: 8, sku: 'TECH-GPU-08', name: 'Tarjeta Gráfica RTX 4070 OC', category: 'Componentes', warehouse: 'Bodega Central', stock: 11, minStock: 5, cost: 540, icon: 'hard-drive' }
+        ];
+
+        let currentFilter = 'todos';
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderKPIs();
+            renderTable();
+            populateModalSelect();
+        });
+
+    
+        function renderKPIs() {
+            const totalStock = inventory.reduce((acc, i) => acc + i.stock, 0);
+            const totalValue = inventory.reduce((acc, i) => acc + (i.stock * i.cost), 0);
+            const lowStockCount = inventory.filter(i => i.stock <= i.minStock).length;
+
+            document.getElementById('kpiTotalStock').textContent = totalStock.toLocaleString();
+            document.getElementById('kpiTotalValue').textContent = '$' + totalValue.toLocaleString();
+            document.getElementById('kpiLowStock').textContent = lowStockCount;
+
+            document.getElementById('filterBtnTodos').textContent = `Todos (${inventory.length})`;
+            document.getElementById('filterBtnCritico').textContent = `Stock Bajo (${lowStockCount})`;
+            document.getElementById('filterBtnOptimo').textContent = `Óptimo (${inventory.length - lowStockCount})`;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('inventoryTableBody');
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            const filtered = inventory.filter(item => {
+                const matchesText = item.sku.toLowerCase().includes(query) || item.name.toLowerCase().includes(query);
+                const isCritical = item.stock <= item.minStock;
+                let matchesStatus = true;
+
+                if (currentFilter === 'critico') matchesStatus = isCritical;
+                if (currentFilter === 'optimo') matchesStatus = !isCritical;
+
+                return matchesText && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-10 text-slate-400">
+                            No se encontraron artículos que coincidan con la búsqueda.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => {
+                const isCritical = item.stock <= item.minStock;
+                const percentage = Math.min(100, Math.round((item.stock / (item.minStock * 2)) * 100));
+
+                return `
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                        <td class="px-5 py-4 font-mono font-bold text-[#6F9FCB]">
+                            ${item.sku}
+                        </td>
+                        <td class="px-5 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[#6F9FCB]">
+                                    <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-[#243B53] block">${item.name}</span>
+                                    <span class="text-[10px] text-slate-400">${item.category}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-4 text-slate-600 font-medium">
+                            <span class="inline-flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-slate-400"></i>
+                                ${item.warehouse}
+                            </span>
+                        </td>
+                        <td class="px-5 py-4">
+                            <div class="w-36">
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <span class="font-bold">${item.stock} uds</span>
+                                    <span class="text-slate-400">mín. ${item.minStock}</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                    <div class="h-1.5 rounded-full ${isCritical ? 'bg-[#E8847C]' : 'bg-[#A9C7BB]'}" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-4 font-semibold text-slate-600">
+                            $${item.cost.toLocaleString()}
+                        </td>
+                        <td class="px-5 py-4 font-black text-[#243B53]">
+                            $${(item.stock * item.cost).toLocaleString()}
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold border ${isCritical ? 'bg-[#E8847C]/15 text-[#E8847C] border-[#E8847C]/30' : 'bg-[#A9C7BB]/20 text-[#243B53] border-[#A9C7BB]/40'}">
+                                ${isCritical ? 'Bajo Stock' : 'Disponible'}
+                            </span>
+                        </td>
+                        <td class="px-5 py-4 text-right">
+                            <button onclick="openAdjustModal(${item.id})" class="p-2 rounded-lg text-slate-400 hover:text-[#6F9FCB] hover:bg-[#6F9FCB]/10 transition-colors" title="Ajustar Stock">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        
+        function filterInventory() {
+            renderTable();
+        }
+
+        function setStatusFilter(status) {
+            currentFilter = status;
+            document.querySelectorAll('.status-btn').forEach(b => {
+                b.className = 'status-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#243B53] hover:bg-slate-100 transition-all';
+            });
+            if (event && event.target) {
+                event.target.className = 'status-btn px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#6F9FCB] text-white shadow-sm transition-all';
+            }
+            renderTable();
+        }
+
+    
+
+        function populateModalSelect() {
+            const select = document.getElementById('modalItemSelect');
+            select.innerHTML = inventory.map(item => `
+                <option value="${item.id}">${item.sku} - ${item.name} (${item.stock} uds en ${item.warehouse})</option>
+            `).join('');
+        }
+
+        function onModalItemSelectChange(id) {
+            document.getElementById('modalItemId').value = id;
+        }
+
+
+        function openAdjustModal(id = null) {
+            const select = document.getElementById('modalItemSelect');
+            if (id) {
+                select.value = id;
+            }
+            document.getElementById('modalItemId').value = select.value;
+            document.getElementById('modalQty').value = 5;
+            document.getElementById('modalReason').value = '';
+            document.getElementById('adjustModal').classList.remove('hidden');
+        }
+
+        function closeAdjustModal() {
+            document.getElementById('adjustModal').classList.add('hidden');
+        }
+
+        function handleStockSubmit(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('modalItemSelect').value, 10);
+            const type = document.getElementById('modalType').value;
+            const qty = parseInt(document.getElementById('modalQty').value, 10);
+
+            const item = inventory.find(i => i.id === id);
+            if (!item) return;
+
+            if (type === 'entrada') {
+                item.stock += qty;
+            } else {
+                item.stock = Math.max(0, item.stock - qty);
+            }
+
+            renderKPIs();
+            renderTable();
+            populateModalSelect();
+            closeAdjustModal();
+
+            showToast(`${type === 'entrada' ? '+' : '-'}${qty} uds para ${item.name}`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
