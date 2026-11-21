@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+
+    <link rel="stylesheet" href="../Assets/Estilos.css">
+</head>
+
+<body>
+
+<main class="registro-layout">
+    <section class="panel-visual">
+
+        <div class="marca-wipacer">
+            WIPACER<span>.</span>
+        </div>
+
+        <div class="contenido-visual">
+            <span class="etiqueta-visual">
+                <span class="punto-activo"></span>
+                ERP INTELIGENTE
+            </span>
+
+            <h1>
+                Tu empresa.<br>
+                Tu futuro.<br>
+                <span>Una sola plataforma.</span>
+            </h1>
+
+            <p>
+                Optimiza tus procesos, conecta tus áreas
+                y lleva la gestión de tu empresa a otro nivel.
+            </p>
+
+            <div class="beneficios">
+                <div>✦ Gestión empresarial</div>
+                <div>✦ Automatización inteligente</div>
+                <div>✦ Información en tiempo real</div>
+            </div>
+        </div>
+
+        <div class="pie-visual">
+            Inteligencia que transforma negocios.
+        </div>
+
+    </section>
+
+
+    <section class="panel-registro">
+
+        <div class="contenedor-formulario">
+
+            <div class="encabezado-formulario">
+                <span class="subtitulo">COMIENZA CON WIPACER</span>
+
+                <h2>Crear una cuenta</h2>
+
+                <p>
+                    Completa tus datos para formar parte
+                    de nuestra plataforma.
+                </p>
+            </div>
+
+            <form id="formRegistro"
+                  action="../Modelos/Registrar.php"
+                  method="POST">
+
+                <div class="grupo-input">
+                    <label for="IdEmpresa">Empresa</label>
+                    <select id="IdEmpresa" name="IdEmpresa" required>
+                        <option value="">Cargando empresas...</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Nombre">Nombres</label>
+                    <input type="text" id="Nombre" name="Nombre"
+                           maxlength="100" required
+                           placeholder="Ingrese nombres">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Contrasena">Contraseña</label>
+                    <input type="password" id="Contrasena" name="Contrasena"
+                           minlength="8" maxlength="100" required
+                           autocomplete="new-password"
+                           placeholder="Ingrese una contraseña">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Apellido">Apellidos</label>
+                    <input type="text" id="Apellido" name="Apellido"
+                           maxlength="100" required
+                           placeholder="Ingrese apellidos">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Correo">Correo electrónico</label>
+                    <input type="email" id="Correo" name="Correo"
+                           maxlength="150" required
+                           placeholder="ejemplo@correo.com">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Telefono">Teléfono</label>
+                    <input type="tel" id="Telefono" name="Telefono"
+                           maxlength="20"
+                           placeholder="315426897">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="Direccion">Dirección</label>
+                    <input type="text" id="Direccion" name="Direccion"
+                           maxlength="50"
+                           placeholder="Ingrese su dirección">
+                </div>
+
+                 <div class="grupo-input">
+                    <label for="Documento">Documento</label>
+                    <input type= int id="Documento" name="Documento"
+                           maxlength="50"
+                           placeholder="Ingrese su documento">
+                </div>
+
+                <div class="grupo-botones">
+                    <button type="submit">Crear mi cuenta →</button>
+                    <button type="reset">Limpiar</button>
+                </div>
+
+                <p id="mensajeRegistro" role="status"
+                   aria-live="polite">Cargando empresas...</p>
+
+            </form>
+
+            <div class="texto-inferior">
+                ¿Ya tienes una cuenta?
+                <a href="Login.html">Inicia sesión</a>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../Controladores/Registro.js"></script>
+
+</body>
+
+</html>
