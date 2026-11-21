@@ -1,0 +1,214 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #F4F7FA;
+    color: #243B53;
+}
+
+
+
+:root {
+    --azul-principal: #6F9FCB;
+    --azul-oscuro: #1A2838;
+    --lavanda: #9B91C9;
+    --verde-suave: #A9C7BB;
+    --coral: #E8847C;
+    --beige: #E8D2AD;
+    --fondo: #F4F7FA;
+    --texto: #243B53;
+}
+
+
+.boton-registrar {
+    background-color: var(--azul-principal);
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+.boton-registrar:hover {
+    background-color: #5686B2;
+    color: white;
+}
+
+
+
+.tarjeta {
+    border: none;
+    transition: 0.3s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-3px);
+}
+
+
+.modal {
+    display: none;
+}
+
+/* Estilos generales de la pagina */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #F4F7FA;
+    color: #243B53;
+    padding: 25px;
+}
+
+/* Tarjetas del resumen de ventas */
+.tarjeta {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto cuando se pasa el cursor sobre una tarjeta */
+.tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(26, 40, 56, 0.08) !important;
+}
+
+/* Boton para abrir el formulario */
+.boton-registrar {
+    background-color: #6F9FCB;
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+/* Efecto del boton registrar */
+.boton-registrar:hover {
+    background-color: #5686B2;
+    color: white;
+}
+
+
+/* Fondo que aparece detrás del formulario */
+#modalVenta {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    background-color: rgba(26, 40, 56, 0.55);
+
+    /* Organiza y centra la ventana */
+    align-items: center;
+    justify-content: center;
+
+    /* Permite desplazarse si el modal es muy alto */
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Contenido interno del modal */
+.contenido-modal {
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Boton de cerrar */
+.boton-cerrar {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: none;
+    color: #243B53;
+}
+
+/* Efecto al pasar el cursor sobre cerrar */
+.boton-cerrar:hover {
+    background-color: #E8D2AD;
+}
+
+/* Boton cancelar */
+.boton-cancelar {
+    color: #243B53;
+    border: 1px solid #D6DEE8;
+    transition: 0.3s;
+}
+
+/* Efecto al pasar el cursor sobre cancelar */
+.boton-cancelar:hover {
+    background-color: #E8D2AD;
+}
+
+/* Boton guardar */
+.boton-guardar {
+    background-color: #6F9FCB;
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+/* Efecto al pasar el cursor sobre guardar */
+.boton-guardar:hover {
+    background-color: #5686B2;
+    color: white;
+}
+
+/* Estilo de la tarjeta del historial */
+.historial-ventas {
+    background-color: white;
+}
+
+/* Estilo de los encabezados de la tabla */
+#tablaVentas thead th {
+    color: #243B53;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Evita que los datos se desorganicen */
+#tablaVentas td {
+    white-space: nowrap;
+}
+
+/* Estilo para las ventas pagadas */
+.estado.pagada {
+    background-color: #A9C7BB;
+    color: #243B53;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Estilo para las ventas pendientes */
+.estado.pendiente {
+    background-color: #E8D2AD;
+    color: #243B53;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Estilo para las ventas canceladas */
+.estado.cancelada {
+    background-color: #E8847C;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+@media (max-width: 576px) {
+
+    /* Reduce el espacio exterior en celulares */
+    body {
+        padding: 15px;
+    }
+
+    /* Los botones se adaptan al espacio */
+    .acciones-modal {
+        flex-direction: column;
+    }
+
+    /* Los botones ocupan todo el ancho */
+    .acciones-modal button {
+        width: 100%;
+    }
+}

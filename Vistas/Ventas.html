@@ -1,11 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ventas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/Ventas.css">
 </head>
+
 <body>
+ <header class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <!-- asigno la clase para el css -->
+
+    <div>
+        <h1 class="fw-bold mb-1" style="color: #1A2838;">Gestion de ventas</h1>
+        <p class="text-secondary mb-0">Administra y consulta tus ventas</p>
+    </div>
+
+    <button type="button" id="abrirFormulario" class="btn boton-registrar rounded-3 px-4 py-2">
+        + Registrar Venta
+    </button>
+
+</header>
+   
+
+<section class="row g-4 mb-4">
+
+ 
+    <article class="col-12 col-md-6 col-xl-3">
+        <!-- article representa un contenido independiente, en este caso una tarjeta -->
+
+        <div class="card tarjeta h-100 shadow-sm rounded-4">
+            <!-- card crea la estructura de la tarjeta -->
+            <!-- h-100 hace que todas las tarjetas tengan la misma altura -->
+            <!-- shadow-sm agrega una sombra suave -->
+            <!-- rounded-4 redondea las esquinas -->
+
+            <div class="card-body p-4">
+                <!-- card-body organiza el contenido interno -->
+                <!-- p-4 agrega espacio interno para que el contenido no quede pegado -->
+
+                <h5 class="card-title text-secondary">Ventas totales</h5>
+                <!-- card-title identifica el titulo de la tarjeta -->
+
+                <h2 class="fw-bold" style="color: #1A2838;">128</h2>
+                <!-- fw-bold coloca el numero en negrita -->
+
+                <p class="text-secondary mb-0">Ventas registradas</p>
+                <!-- text-secondary aplica un color secundario al texto -->
+                <!-- mb-0 elimina el margen inferior del parrafo -->
+            </div>
+        </div>
+    </article>
+
+    <article class="col-12 col-md-6 col-xl-3">
+
+        <div class="card tarjeta h-100 shadow-sm rounded-4">
+            <div class="card-body p-4">
+
+                <h5 class="card-title text-secondary">Ingresos</h5>
+
+                <h2 class="fw-bold" style="color: #A9C7BB;">$8.450.000</h2>
+                <!-- Se utiliza el color verde suave de la paleta Wipacer -->
+
+                <p class="text-secondary mb-0">Ingresos acumulados</p>
+
+            </div>
+        </div>
+    </article>
+
+    <article class="col-12 col-md-6 col-xl-3">
+
+        <div class="card tarjeta h-100 shadow-sm rounded-4">
+            <div class="card-body p-4">
+
+                <h5 class="card-title text-secondary">Ventas pagadas</h5>
+
+                <h2 class="fw-bold" style="color: #6F9FCB;">110</h2>
+             
+                <p class="text-secondary mb-0">Ventas completadas</p>
+
+            </div>
+        </div>
+    </article>
+
     
+    <article class="col-12 col-md-6 col-xl-3">
+
+        <div class="card tarjeta h-100 shadow-sm rounded-4">
+            <div class="card-body p-4">
+
+                <h5 class="card-title text-secondary">Pendientes</h5>
+
+                <h2 class="fw-bold" style="color: #E8847C;">18</h2>
+                
+
+                <p class="text-secondary mb-0">Ventas por completar</p>
+
+            </div>
+        </div>
+    </article>
+
+</section>
+
+<!-- Seccion donde se muestra el historial de ventas -->
+<section class="card shadow-sm rounded-4 border-0 historial-ventas">
+
+    <!-- Agrupa el contenido de la tarjeta -->
+    <div class="card-body p-4">
+
+        <!-- Encabezado del historial -->
+        <div class="titulo-historial mb-4">
+            <h3 class="fw-bold mb-1" style="color: #1A2838;">Historial de ventas</h3>
+            <p class="text-secondary mb-0">Consulta, busca y administra las ventas registradas</p>
+        </div>
+
+        <!-- Contenedor para organizar el buscador y el filtro -->
+        <div class="d-flex flex-column flex-md-row gap-3 mb-4">
+
+            <!-- Campo para buscar una venta -->
+            <div class="flex-grow-1">
+                <input type="search" id="buscarventa" class="form-control rounded-3"
+                    placeholder="Buscar una venta...">
+                <!-- form-control aplica el estilo de Bootstrap al campo -->
+            </div>
+
+            <!-- Filtro para consultar ventas según su estado -->
+            <div>
+                <select id="filtroEstado" class="form-select rounded-3">
+                    <option value="">Todos los estados</option>
+                    <option value="Pagada">Pagada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+                <!-- form-select estiliza el menu desplegable -->
+            </div>
+
+        </div>
+
+        <!-- Contenedor que permite desplazamiento horizontal en pantallas pequeñas -->
+        <div class="table-responsive">
+
+            <!-- Crea la tabla y le asignamos el id -->
+            <table id="tablaVentas" class="table table-hover align-middle mb-0">
+
+                <!-- Agrupa los encabezados de la tabla -->
+                <thead class="table-light">
+                    <tr>
+                        <!-- Crea una celda de encabezado -->
+                        <th scope="col">Factura</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+
+                <!-- Agrupa la informacion de las ventas -->
+                <tbody>
+
+                    <!-- Crea una fila con la informacion de una venta -->
+                    <tr>
+                        <td>VTA-001</td>
+                        <td>María Rodríguez</td>
+                        <td>20/11/2026</td>
+                        <td>$250.000</td>
+                        <td>
+                            <span class="badge rounded-pill text-bg-success">Pagada</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary boton-ver">
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Crea otra fila con informacion de una venta -->
+                    <tr>
+                        <td>VTA-002</td>
+                        <td>Juan Pérez</td>
+                        <td>20/11/2026</td>
+                        <td>$180.000</td>
+                        <td>
+                            <span class="badge rounded-pill text-bg-warning">Pendiente</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary boton-ver">
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Crea otra fila con informacion de una venta -->
+                    <tr>
+                        <td>VTA-003</td>
+                        <td>Laura Gómez</td>
+                        <td>19/11/2026</td>
+                        <td>$420.000</td>
+                        <td>
+                            <span class="badge rounded-pill text-bg-success">Pagada</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary boton-ver">
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Crea otra fila con informacion de una venta -->
+                    <tr>
+                        <td>VTA-004</td>
+                        <td>Carlos Díaz</td>
+                        <td>19/11/2026</td>
+                        <td>$95.000</td>
+                        <td>
+                            <span class="badge rounded-pill text-bg-danger">Cancelada</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary boton-ver">
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+<!-- Finaliza el historial de ventas -->
+
+
+
+
+    <!-- modales es la ventada que aparece arriba del contenido
+    para mostrar algo sin tener que ir a otro html-->
+
+
+    <div id="modalVenta" class="modal">
+        <!-- modal es la ventana emergente que se mostrara sobre la pagina -->
+
+        <div class="contenido-modal bg-white rounded-4 shadow-lg p-4">
+            <!-- bg-white coloca un fondo blanco -->
+            <!-- rounded-4 redondea las esquinas -->
+            <!-- shadow-lg agrega una sombra para resaltar el modal -->
+            <!-- p-4 agrega espacio interno -->
+
+            <div class="encabezado-modal d-flex justify-content-between align-items-start mb-4">
+                <!-- d-flex organiza los elementos horizontalmente -->
+                <!-- justify-content-between separa el titulo y el boton de cerrar -->
+                <!-- align-items-start alinea los elementos en la parte superior -->
+                <!-- mb-4 agrega espacio debajo del encabezado -->
+
+                <div>
+                    <h2 class="fw-bold mb-1" style="color: #1A2838;">Nueva Venta</h2>
+                    <p class="text-secondary mb-0">Completa los datos para registrar la venta.</p>
+                </div>
+
+                <button type="button" id="cerrarFormulario" class="boton-cerrar btn btn-light rounded-circle">
+                    &times;
+                    <!-- &times; representa el signo x multiplicacion lo usamos
+                    //como simbolo visual para cerrar la ventada-->
+                    <!-- btn-light aplica un fondo claro al boton -->
+                    <!-- rounded-circle hace que el boton sea circular -->
+                </button>
+            </div>
+
+            <!-- formulario para registrar una venta -->
+            <form id="formNuevaVenta">
+
+                <!-- Campo para seleccionar el cliente -->
+                <div class="campo-modal mb-3">
+                    <label for="clienteVenta" class="form-label fw-semibold">Cliente</label>
+                    <!-- form-label aplica estilos a la etiqueta -->
+
+                    <select id="clienteVenta" class="form-select rounded-3" required>
+                        <option value="">Seleccionar clientes</option>
+                    </select>
+                    <!-- form-select estiliza el menu desplegable -->
+                    <!-- required obliga a seleccionar una opcion -->
+                </div>
+
+                <!-- Campo para seleccionar el producto -->
+                <div class="campo-modal mb-3">
+                    <label for="productoVenta" class="form-label fw-semibold">Producto</label>
+
+                    <select id="productoVenta" class="form-select rounded-3" required>
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                </div>
+
+                <!-- Agrupa los campos de cantidad y precio -->
+                <div class="row g-3 mb-3">
+                    <!-- row crea una fila y g-3 separa las columnas -->
+
+                    <div class="campo-modal col-12 col-md-6">
+                        <!-- col-12 ocupa todo el ancho en pantallas pequeñas -->
+                        <!-- col-md-6 ocupa la mitad en pantallas medianas -->
+
+                        <label for="cantidadVenta" class="form-label fw-semibold">Cantidad</label>
+
+                        <input type="number" id="cantidadVenta" class="form-control rounded-3"
+                            min="1" value="1" required>
+                        <!-- form-control estiliza el campo de entrada -->
+                        <!-- value="1" inicalmente habra 1-->
+                    </div>
+
+                    <div class="campo-modal col-12 col-md-6">
+
+                        <label for="precioVenta" class="form-label fw-semibold">Precio unitario</label>
+
+                        <input type="number" id="precioVenta" class="form-control rounded-3"
+                            min="0" placeholder="0" required>
+                    </div>
+                </div>
+
+                <!-- Campo para seleccionar el metodo de pago -->
+                <div class="campo-modal mb-4">
+                    <label for="metodoVenta" class="form-label fw-semibold">Método de pago</label>
+
+                    <select id="metodoVenta" class="form-select rounded-3" required>
+                        <option value="">Seleccionar método</option>
+                    </select>
+                </div>
+
+                <!-- Botones para cancelar o guardar la venta -->
+                <div class="acciones-modal d-flex justify-content-end gap-2 flex-wrap">
+                    <!-- justify-content-end ubica los botones a la derecha -->
+                    <!-- gap-2 agrega espacio entre los botones -->
+                    <!-- flex-wrap permite que se acomoden si no hay suficiente espacio -->
+
+                    <button type="button" id="cancelarVenta" class="boton-cancelar btn btn-light rounded-3 px-4">
+                        Cancelar
+                    </button>
+                    <!-- btn-light aplica un estilo claro -->
+                    <!-- px-4 agrega espacio horizontal dentro del boton -->
+
+                    <button type="submit" class="boton-guardar btn rounded-3 px-4">
+                        Guardar venta
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+                   
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="../Controladores/Ventas.js"></script>
 </body>
+
 </html>
