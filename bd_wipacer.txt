@@ -1,0 +1,403 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Versión del servidor:         8.4.3 - MySQL Community Server - GPL
+-- SO del servidor:              Win64
+-- HeidiSQL Versión:             12.8.0.6908
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Volcando estructura de base de datos para wipacer
+CREATE DATABASE IF NOT EXISTS `wipacer` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `wipacer`;
+
+-- Volcando estructura para tabla wipacer.bodega
+CREATE TABLE IF NOT EXISTS `bodega` (
+  `IdBodega` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `Nombre` varchar(150) NOT NULL,
+  `Direccion` varchar(200) DEFAULT NULL,
+  `Responsable` varchar(150) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  PRIMARY KEY (`IdBodega`),
+  KEY `IdEmpresa` (`IdEmpresa`),
+  CONSTRAINT `bodega_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.bodega: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.categoria
+CREATE TABLE IF NOT EXISTS `categoria` (
+  `IdCategoria` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Descripcion` varchar(255) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  PRIMARY KEY (`IdCategoria`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`Nombre`),
+  CONSTRAINT `categoria_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.categoria: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.cliente
+CREATE TABLE IF NOT EXISTS `cliente` (
+  `IdCliente` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `TipoDocumento` varchar(30) NOT NULL,
+  `NumeroDocumento` varchar(30) NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Apellido` varchar(100) DEFAULT NULL,
+  `Correo` varchar(150) DEFAULT NULL,
+  `Telefono` varchar(20) DEFAULT NULL,
+  `Direccion` varchar(200) DEFAULT NULL,
+  `Ciudad` varchar(100) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  `FechaRegistro` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IdCliente`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`NumeroDocumento`),
+  CONSTRAINT `cliente_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.cliente: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.compra
+CREATE TABLE IF NOT EXISTS `compra` (
+  `IdCompra` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdProveedor` int NOT NULL,
+  `IdUsuario` int NOT NULL,
+  `NumeroCompra` varchar(50) NOT NULL,
+  `Fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Subtotal` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Impuesto` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Total` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Estado` enum('Pendiente','Recibida','Anulada') DEFAULT 'Pendiente',
+  PRIMARY KEY (`IdCompra`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`NumeroCompra`),
+  KEY `IdProveedor` (`IdProveedor`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `compra_ibfk_2` FOREIGN KEY (`IdProveedor`) REFERENCES `proveedor` (`IdProveedor`),
+  CONSTRAINT `compra_ibfk_3` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.compra: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.cotizacion
+CREATE TABLE IF NOT EXISTS `cotizacion` (
+  `IdCotizacion` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdCliente` int NOT NULL,
+  `IdUsuario` int NOT NULL,
+  `NumeroCotizacion` varchar(50) NOT NULL,
+  `FechaCotizacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `FechaVencimiento` date DEFAULT NULL,
+  `Subtotal` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Impuesto` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Descuento` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Total` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Estado` enum('Borrador','Enviada','Aceptada','Rechazada','Vencida') DEFAULT 'Borrador',
+  `Observaciones` text,
+  PRIMARY KEY (`IdCotizacion`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`NumeroCotizacion`),
+  KEY `IdCliente` (`IdCliente`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `cotizacion_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `cotizacion_ibfk_2` FOREIGN KEY (`IdCliente`) REFERENCES `cliente` (`IdCliente`),
+  CONSTRAINT `cotizacion_ibfk_3` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.cotizacion: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.detallecompra
+CREATE TABLE IF NOT EXISTS `detallecompra` (
+  `IdDetalleCompra` int NOT NULL AUTO_INCREMENT,
+  `IdCompra` int NOT NULL,
+  `IdProducto` int NOT NULL,
+  `Cantidad` int NOT NULL,
+  `PrecioUnitario` decimal(12,2) NOT NULL,
+  `Subtotal` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`IdDetalleCompra`),
+  KEY `IdCompra` (`IdCompra`),
+  KEY `IdProducto` (`IdProducto`),
+  CONSTRAINT `detallecompra_ibfk_1` FOREIGN KEY (`IdCompra`) REFERENCES `compra` (`IdCompra`),
+  CONSTRAINT `detallecompra_ibfk_2` FOREIGN KEY (`IdProducto`) REFERENCES `producto` (`IdProducto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.detallecompra: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.detallefactura
+CREATE TABLE IF NOT EXISTS `detallefactura` (
+  `IdDetalleFactura` int NOT NULL AUTO_INCREMENT,
+  `IdFactura` int NOT NULL,
+  `IdProducto` int NOT NULL,
+  `Cantidad` int NOT NULL,
+  `PrecioUnitario` decimal(12,2) NOT NULL,
+  `Descuento` decimal(12,2) DEFAULT '0.00',
+  `Subtotal` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`IdDetalleFactura`),
+  KEY `IdFactura` (`IdFactura`),
+  KEY `IdProducto` (`IdProducto`),
+  CONSTRAINT `detallefactura_ibfk_1` FOREIGN KEY (`IdFactura`) REFERENCES `factura` (`IdFactura`),
+  CONSTRAINT `detallefactura_ibfk_2` FOREIGN KEY (`IdProducto`) REFERENCES `producto` (`IdProducto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.detallefactura: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.detallepedido
+CREATE TABLE IF NOT EXISTS `detallepedido` (
+  `IdDetallePedido` int NOT NULL AUTO_INCREMENT,
+  `IdPedido` int NOT NULL,
+  `IdProducto` int NOT NULL,
+  `Cantidad` int NOT NULL,
+  `PrecioUnitario` decimal(12,2) NOT NULL,
+  `Subtotal` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`IdDetallePedido`),
+  KEY `IdPedido` (`IdPedido`),
+  KEY `IdProducto` (`IdProducto`),
+  CONSTRAINT `detallepedido_ibfk_1` FOREIGN KEY (`IdPedido`) REFERENCES `pedido` (`IdPedido`),
+  CONSTRAINT `detallepedido_ibfk_2` FOREIGN KEY (`IdProducto`) REFERENCES `producto` (`IdProducto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.detallepedido: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.empleado
+CREATE TABLE IF NOT EXISTS `empleado` (
+  `IdEmpleado` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdUsuario` int DEFAULT NULL,
+  `Documento` varchar(30) NOT NULL,
+  `FechaIngreso` date NOT NULL,
+  `Salario` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Estado` enum('Activo','Inactivo','Retirado') DEFAULT 'Activo',
+  PRIMARY KEY (`IdEmpleado`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`Documento`),
+  UNIQUE KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.empleado: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.empresa
+CREATE TABLE IF NOT EXISTS `empresa` (
+  `IdEmpresa` int NOT NULL AUTO_INCREMENT,
+  `NombreEmpresa` varchar(150) NOT NULL,
+  `NIT` varchar(30) NOT NULL,
+  `Telefono` varchar(20) DEFAULT NULL,
+  `Correo` varchar(100) DEFAULT NULL,
+  `Direccion` varchar(200) DEFAULT NULL,
+  `Ciudad` varchar(100) DEFAULT NULL,
+  `Logo` varchar(255) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  `FechaRegistro` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IdEmpresa`),
+  UNIQUE KEY `NIT` (`NIT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.empresa: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.factura
+CREATE TABLE IF NOT EXISTS `factura` (
+  `IdFactura` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdCliente` int NOT NULL,
+  `IdUsuario` int NOT NULL,
+  `NumeroFactura` varchar(50) NOT NULL,
+  `Fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Subtotal` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Impuesto` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Descuento` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Total` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Estado` enum('Pendiente','Pagada','Anulada') DEFAULT 'Pendiente',
+  PRIMARY KEY (`IdFactura`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`NumeroFactura`),
+  KEY `IdCliente` (`IdCliente`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `factura_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `factura_ibfk_2` FOREIGN KEY (`IdCliente`) REFERENCES `cliente` (`IdCliente`),
+  CONSTRAINT `factura_ibfk_3` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.factura: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.inventario
+CREATE TABLE IF NOT EXISTS `inventario` (
+  `IdInventario` int NOT NULL AUTO_INCREMENT,
+  `IdProducto` int NOT NULL,
+  `IdBodega` int NOT NULL,
+  `CantidadDisponible` int DEFAULT '0',
+  `CantidadMinima` int DEFAULT '0',
+  `CantidadMaxima` int DEFAULT '0',
+  `FechaActualizacion` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IdInventario`),
+  UNIQUE KEY `IdProducto` (`IdProducto`,`IdBodega`),
+  KEY `IdBodega` (`IdBodega`),
+  CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`IdProducto`) REFERENCES `producto` (`IdProducto`),
+  CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`IdBodega`) REFERENCES `bodega` (`IdBodega`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.inventario: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.pago
+CREATE TABLE IF NOT EXISTS `pago` (
+  `IdPago` int NOT NULL AUTO_INCREMENT,
+  `IdFactura` int NOT NULL,
+  `MetodoPago` varchar(50) NOT NULL,
+  `Valor` decimal(12,2) NOT NULL,
+  `FechaPago` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Referencia` varchar(100) DEFAULT NULL,
+  `Estado` enum('Pendiente','Confirmado','Anulado') DEFAULT 'Pendiente',
+  PRIMARY KEY (`IdPago`),
+  KEY `IdFactura` (`IdFactura`),
+  CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`IdFactura`) REFERENCES `factura` (`IdFactura`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.pago: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.pedido
+CREATE TABLE IF NOT EXISTS `pedido` (
+  `IdPedido` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdCliente` int NOT NULL,
+  `IdUsuario` int NOT NULL,
+  `NumeroPedido` varchar(50) NOT NULL,
+  `FechaPedido` datetime DEFAULT CURRENT_TIMESTAMP,
+  `FechaEntrega` date DEFAULT NULL,
+  `Subtotal` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Impuesto` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Descuento` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Total` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `Estado` enum('Pendiente','Confirmado','En Preparacion','Enviado','Entregado','Cancelado') DEFAULT 'Pendiente',
+  `Observaciones` text,
+  PRIMARY KEY (`IdPedido`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`NumeroPedido`),
+  KEY `IdCliente` (`IdCliente`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`IdCliente`) REFERENCES `cliente` (`IdCliente`),
+  CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.pedido: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.permiso
+CREATE TABLE IF NOT EXISTS `permiso` (
+  `IdPermiso` int NOT NULL AUTO_INCREMENT,
+  `NombrePermiso` varchar(100) NOT NULL,
+  `Modulo` varchar(100) NOT NULL,
+  `Accion` varchar(50) NOT NULL,
+  `Descripcion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`IdPermiso`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.permiso: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.producto
+CREATE TABLE IF NOT EXISTS `producto` (
+  `IdProducto` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `IdCategoria` int NOT NULL,
+  `Codigo` varchar(50) NOT NULL,
+  `Nombre` varchar(150) NOT NULL,
+  `Descripcion` text,
+  `PrecioCompra` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `PrecioVenta` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `StockMinimo` int DEFAULT '0',
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  `FechaRegistro` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IdProducto`),
+  UNIQUE KEY `IdEmpresa` (`IdEmpresa`,`Codigo`),
+  KEY `IdCategoria` (`IdCategoria`),
+  CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`),
+  CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`IdCategoria`) REFERENCES `categoria` (`IdCategoria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.producto: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.proveedor
+CREATE TABLE IF NOT EXISTS `proveedor` (
+  `IdProveedor` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `Nombre` varchar(150) NOT NULL,
+  `NIT` varchar(30) DEFAULT NULL,
+  `Contacto` varchar(100) DEFAULT NULL,
+  `Correo` varchar(150) DEFAULT NULL,
+  `Telefono` varchar(20) DEFAULT NULL,
+  `Direccion` varchar(200) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  PRIMARY KEY (`IdProveedor`),
+  KEY `IdEmpresa` (`IdEmpresa`),
+  CONSTRAINT `proveedor_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.proveedor: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.rol
+CREATE TABLE IF NOT EXISTS `rol` (
+  `IdRol` int NOT NULL AUTO_INCREMENT,
+  `NombreRol` varchar(100) NOT NULL,
+  `Descripcion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`IdRol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.rol: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.rolpermiso
+CREATE TABLE IF NOT EXISTS `rolpermiso` (
+  `IdRol` int NOT NULL,
+  `IdPermiso` int NOT NULL,
+  PRIMARY KEY (`IdRol`,`IdPermiso`),
+  KEY `IdPermiso` (`IdPermiso`),
+  CONSTRAINT `rolpermiso_ibfk_1` FOREIGN KEY (`IdRol`) REFERENCES `rol` (`IdRol`),
+  CONSTRAINT `rolpermiso_ibfk_2` FOREIGN KEY (`IdPermiso`) REFERENCES `permiso` (`IdPermiso`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.rolpermiso: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.usuario
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `IdUsuario` int NOT NULL AUTO_INCREMENT,
+  `IdEmpresa` int NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Apellido` varchar(100) NOT NULL,
+  `Correo` varchar(150) NOT NULL,
+  `PasswordHash` varchar(255) NOT NULL,
+  `Telefono` varchar(20) DEFAULT NULL,
+  `Estado` enum('Activo','Inactivo','Bloqueado') DEFAULT 'Activo',
+  `FechaRegistro` datetime DEFAULT CURRENT_TIMESTAMP,
+  `UltimoAcceso` datetime DEFAULT NULL,
+  PRIMARY KEY (`IdUsuario`),
+  UNIQUE KEY `Correo` (`Correo`),
+  KEY `IdEmpresa` (`IdEmpresa`),
+  CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`IdEmpresa`) REFERENCES `empresa` (`IdEmpresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.usuario: ~0 rows (aproximadamente)
+
+-- Volcando estructura para tabla wipacer.usuariorol
+CREATE TABLE IF NOT EXISTS `usuariorol` (
+  `IdUsuario` int NOT NULL,
+  `IdRol` int NOT NULL,
+  PRIMARY KEY (`IdUsuario`,`IdRol`),
+  KEY `IdRol` (`IdRol`),
+  CONSTRAINT `usuariorol_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`),
+  CONSTRAINT `usuariorol_ibfk_2` FOREIGN KEY (`IdRol`) REFERENCES `rol` (`IdRol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla wipacer.usuariorol: ~0 rows (aproximadamente)
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
