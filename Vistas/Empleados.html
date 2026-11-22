@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <title>WIPACER - Empleados</title>
+    <style>
+        .header-mr {
+            background-color: #6F9FCB;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .modulo-card {
+            border-top: 4px solid #6F9FCB;
+            border-radius: 10px;
+        }
+
+        .icono-principal {
+            font-size: 40px;
+            color: #6F9FCB;
+        }
+
+        .boton-registrar {
+            background-color: #6F9FCB;
+            color: white;
+            border: none;
+        }
+
+        .boton-registrar:hover {
+            background-color: #6F9FCB;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="header-mr d-flex justify-content-between align-items-center">
+        <h3>WIPACER - Empleados</h3>
+        <div class="text-end">
+            <small id="nombreUsuario"></small>
+            <button class="btn btn-danger btn-sm m-1" onclick="cerrarSesion()">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <div class="container py-4">
+
+        <header class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+            <div>
+                <h4 class="fw-bold mb-1" style="color: #1A2838;">Gestión de Empleados y Roles</h4>
+                <p class="text-secondary mb-0">Administra, consulta y asigna los roles de tus empleados</p>
+            </div>
+
+            <button type="button" class="btn boton-registrar rounded-3 px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalEmpleado">
+                + Registrar Empleado
+            </button>
+        </header>
+
+        <section class="row g-4 mb-4">
+            <article class="col-12 col-md-6 col-xl-3">
+                <div class="card modulo-card h-100 shadow-sm bg-white">
+                    <div class="card-body p-4">
+                        <h6 class="card-title text-secondary">Empleados totales</h6>
+                        <h2 class="fw-bold my-2" style="color: #1A2838;">4</h2>
+                        <p class="text-secondary small mb-0">Empleados Registrados</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="col-12 col-md-6 col-xl-3">
+                <div class="card modulo-card h-100 shadow-sm bg-white">
+                    <div class="card-body p-4">
+                        <h6 class="card-title text-secondary">Activos</h6>
+                        <h2 class="fw-bold my-2" style="color: #9B91C9;">3</h2>
+                        <p class="text-secondary small mb-0">Con acceso activo</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="col-12 col-md-6 col-xl-3">
+                <div class="card modulo-card h-100 shadow-sm bg-white">
+                    <div class="card-body p-4">
+                        <h6 class="card-title text-secondary">Roles Asignados</h6>
+                        <h2 class="fw-bold my-2" style="color: #A9C7BB;">4</h2>
+                        <p class="text-secondary small mb-0">Perfiles configurados</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="col-12 col-md-6 col-xl-3">
+                <div class="card modulo-card h-100 shadow-sm bg-white">
+                    <div class="card-body p-4">
+                        <h6 class="card-title text-secondary">Inactivos</h6>
+                        <h2 class="fw-bold my-2" style="color: #E8847C;">1</h2>
+                        <p class="text-secondary small mb-0">Sin acceso al sistema</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <div class="card modulo-card shadow-sm p-4 bg-white">
+
+                    <div class="d-flex align-items-center gap-2 mb-4 pb-2 border-bottom">
+                        <i class="bi bi-people-fill icono-principal"></i>
+                        <div>
+                            <h4 class="text-primary m-0">Directorio de Empleados y Asignación de Roles</h4>
+                            <span class="small text-muted">Busque empleados y seleccione el rol correspondiente en el sistema.</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" placeholder="Buscar empleado por nombre o correo...">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select">
+                                <option value="">Todos los roles</option>
+                                <option value="admin">Administrador</option>
+                                <option value="facturacion">Facturación</option>
+                                <option value="inventario">Inventario</option>
+                                <option value="vendedor">Vendedor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr class="text-center small ">
+                                    <th>N°</th>
+                                    <th>Empleado</th>
+                                    <th>Correo</th>
+                                    <th>Rol Asignado</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
