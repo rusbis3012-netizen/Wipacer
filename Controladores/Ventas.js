@@ -82,19 +82,19 @@ modal.addEventListener("click", (event) => {
 
 const buscadorVentas = document.getElementById("buscarventa");
 
-// Detecta cuando el usuario escribe en el buscador
-buscadorVentas.addEventListener("input", () => {
 
-    // Obtiene el texto escrito y lo convierte a minusculas
-    const textoBusqueda = buscadorVentas.value.toLowerCase().trim();
+buscadorVentas.addEventListener("input", () => { //  input Detecta cuando el usuario escribe en el buscador
 
-    // Obtiene todas las filas que existen en el cuerpo de la tabla
-    const filas = tablaVentas.querySelectorAll("tr");
+   
+    const textoBusqueda = buscadorVentas.value.toLowerCase().trim(); //toLowerCase obtiene el texto escrito y lo convierte a minusculas
+
+    
+    const filas = tablaVentas.querySelectorAll("tr"); // Coge todas las filas que existen la tabla
 
     // Recorre cada fila de la tabla
     filas.forEach((fila) => {
 
-        // Obtiene el contenido de la fila y lo convierte a minusculas
+        // convierte a minusculas
         const contenidoFila = fila.textContent.toLowerCase();
 
         // Comprueba si el contenido coincide con lo que se esta buscando
